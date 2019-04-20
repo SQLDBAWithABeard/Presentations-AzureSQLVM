@@ -118,6 +118,9 @@ resource "azurerm_virtual_machine" "presentation" {
     admin_username = "${var.VMLocalAdmin}"
     admin_password = "${var.VMLocalAdminPassword}"
   }
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
   tags = {
     environment = "${var.presentation}"
   }
