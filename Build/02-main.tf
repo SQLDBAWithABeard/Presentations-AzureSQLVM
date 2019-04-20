@@ -1,11 +1,12 @@
 provider "azurerm" {
-    version = "=1.24.0"
+  version = "=1.24.0"
 }
 
 resource "azurerm_resource_group" "presentation" {
   name     = "${var.ResourceGroupName}"
   location = "${var.location}"
-    tags = {
+
+  tags = {
     environment = "${var.presentation}"
   }
 }
@@ -25,63 +26,65 @@ resource "azurerm_subnet" "presentation" {
 }
 
 resource "azurerm_network_interface" "presentation" {
-      name                = "${var.VMName}-nic"
+  name                = "${var.VMName}-nic"
   location            = "${azurerm_resource_group.presentation.location}"
   resource_group_name = "${azurerm_resource_group.presentation.name}"
 
-    ip_configuration {
-          name                        = "${var.VMName}conf"
-        subnet_id                     = "${azurerm_subnet.presentation.id}"
-        private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = "${azurerm_public_ip.presentation.id}"
-    }
+  ip_configuration {
+    name                          = "${var.VMName}conf"
+    subnet_id                     = "${azurerm_subnet.presentation.id}"
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = "${azurerm_public_ip.presentation.id}"
+  }
 
-    tags {
-        environment = "${var.presentation}"
-    }
+  tags {
+    environment = "${var.presentation}"
+  }
 }
 
 resource "azurerm_network_security_group" "myterraformnsg" {
-    name                = "${var.VMName}-nsg"
-     location            = "${azurerm_resource_group.presentation.location}"
-     resource_group_name = "${azurerm_resource_group.presentation.name}"
-    
-    security_rule {
-        name                       = "SQL"
-        priority                   = 1001
-        direction                  = "Inbound"
-        access                     = "Allow"
-        protocol                   = "Tcp"
-        source_port_range          = "1433"
-        destination_port_range     = "1433"
-        source_address_prefix      = "*"
-        destination_address_prefix = "*"
-    }
-        security_rule {
-        name                       = "SSH"
-        priority                   = 1002
-        direction                  = "Inbound"
-        access                     = "Allow"
-        protocol                   = "Tcp"
-        source_port_range          = "*"
-        destination_port_range     = "22"
-        source_address_prefix      = "*"
-        destination_address_prefix = "*"
-    }
+  name                = "${var.VMName}-nsg"
+  location            = "${azurerm_resource_group.presentation.location}"
+  resource_group_name = "${azurerm_resource_group.presentation.name}"
 
-    tags {
-        environment = "${var.presentation}"
-    }
+  security_rule {
+    name                       = "SQL"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "1433"
+    destination_port_range     = "1433"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "SSH"
+    priority                   = 1002
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags {
+    environment = "${var.presentation}"
+  }
 }
 
 resource "azurerm_public_ip" "presentation" {
-    name                         = "${var.VMName}-ip"
-    location            = "${azurerm_resource_group.presentation.location}"
-    allocation_method            = "Dynamic"
+  name                = "${var.VMName}-ip"
+  resource_group_name = "${azurerm_resource_group.presentation.name}"
+  location            = "${azurerm_resource_group.presentation.location}"
+  allocation_method   = "Dynamic"
 
-    tags {
-        environment = "${var.presentation}"
-    }
+  tags {
+    environment = "${var.presentation}"
+  }
 }
 
 resource "azurerm_virtual_machine" "presentation" {
