@@ -2,6 +2,12 @@ provider "azurerm" {
   version = "=1.24.0"
 }
 
+terraform {
+  backend "azurerm" {
+    key = "terraform.tfstate"
+  }
+}
+
 resource "azurerm_resource_group" "presentation" {
   name     = "${var.ResourceGroupName}"
   location = "${var.location}"
