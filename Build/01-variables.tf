@@ -57,3 +57,8 @@ variable "VMVersion" {
   default     = "__VMVersion__"
 }
 
+variable "SourceIPRange" {
+  description = "The IP Range for the Network Security Group Rules"
+  default     = "__SourceIPRange__"
+}
+

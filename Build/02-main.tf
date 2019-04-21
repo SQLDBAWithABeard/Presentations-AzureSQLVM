@@ -55,7 +55,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
     protocol                   = "Tcp"
     source_port_range          = "1433"
     destination_port_range     = "1433"
-    source_address_prefix      = "*"
+    source_address_prefix      = "${var.SourceIPRange}"
     destination_address_prefix = "*"
   }
 
@@ -67,7 +67,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "*"
+    source_address_prefix      = "${var.SourceIPRange}"
     destination_address_prefix = "*"
   }
 
